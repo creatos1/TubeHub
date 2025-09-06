@@ -50,23 +50,32 @@
                                 
                                 <div class="row g-2">
                                     <!-- Send to Discord -->
-                                    <div class="col-8">
+                                    <div class="col-6">
                                         <form method="POST" action="{{ url_for('send_to_discord', video_id=video.id) }}" class="d-inline">
                                             <button type="submit" class="btn btn-info w-100">
-                                                <i class="fab fa-discord me-2"></i>Enviar a Discord
+                                                <i class="fab fa-discord me-2"></i>Discord
                                             </button>
                                         </form>
                                     </div>
                                     
-                                    <!-- Delete video -->
-                                    <div class="col-4">
-                                        <form method="POST" action="{{ url_for('delete_video', video_id=video.id) }}" 
-                                              onsubmit="return confirm('Are you sure you want to delete this video?')" class="d-inline">
-                                            <button type="submit" class="btn btn-outline-danger w-100">
-                                                <i class="fas fa-trash"></i>
+                                    <!-- Send to Facebook -->
+                                    <div class="col-6">
+                                        <form method="POST" action="{{ url_for('send_to_facebook', video_id=video.id) }}" class="d-inline">
+                                            <button type="submit" class="btn btn-primary w-100">
+                                                <i class="fab fa-facebook me-2"></i>Facebook
                                             </button>
                                         </form>
                                     </div>
+                                </div>
+                                
+                                <!-- Delete video -->
+                                <div class="mt-2">
+                                    <form method="POST" action="{{ url_for('delete_video', video_id=video.id) }}" 
+                                          onsubmit="return confirm('¿Estás seguro de que quieres eliminar este video?')" class="d-inline w-100">
+                                        <button type="submit" class="btn btn-outline-danger w-100">
+                                            <i class="fas fa-trash me-2"></i>Eliminar
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
