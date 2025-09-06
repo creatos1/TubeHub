@@ -15,6 +15,14 @@
         </div>
 
         {% if videos %}
+            <div class="col-12 mb-4">
+            <div class="alert alert-info">
+                <i class="fas fa-robot me-2"></i>
+                <strong>Automatización de Grupos:</strong> Usa el botón "Grupos FB" para publicar automáticamente en los grupos configurados. 
+                Se abrirá una ventana del navegador donde podrás iniciar sesión en Facebook.
+                <a href="{{ url_for('config') }}" class="alert-link">Configurar grupos aquí</a>.
+            </div>
+        </div>
             <div class="row">
                 {% for video in videos %}
                 <div class="col-lg-6 col-xl-4 mb-4">
