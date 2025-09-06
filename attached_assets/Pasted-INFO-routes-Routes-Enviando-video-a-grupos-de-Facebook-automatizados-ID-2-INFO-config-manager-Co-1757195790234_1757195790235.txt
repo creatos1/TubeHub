@@ -1,0 +1,29 @@
+INFO:routes:Routes: Enviando video a grupos de Facebook automatizados, ID: 2
+INFO:config_manager:ConfigManager: Obteniendo lista de grupos de Facebook
+INFO:config_manager:ConfigManager: Buscando configuración para FB_GROUPS
+INFO:config_manager:ConfigManager: Configuración FB_GROUPS encontrada
+INFO:config_manager:ConfigManager: Encontrados 1 grupos configurados
+INFO:routes:Routes: Iniciando automatización para 'Los MODS MÁS ÉPICOS y BRUTALES para God of War 🔥' en 1 grupos
+INFO:facebook_groups_automation:FacebookGroupsAutomation: Inicializando automatización de grupos
+INFO:facebook_groups_automation:FacebookGroupsAutomation: Configurando Chrome WebDriver
+INFO:WDM:====== WebDriver manager ======
+INFO:WDM:Get LATEST chromedriver version for google-chrome
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): chromedriver.storage.googleapis.com:443
+INFO:routes:Routes: Accediendo a página de inicio
+INFO:routes:Routes: Encontrados 1 videos en la colección
+DEBUG:urllib3.connectionpool:https://chromedriver.storage.googleapis.com:443 "GET /LATEST_RELEASE HTTP/1.1" 200 13
+INFO:WDM:About to download new driver from https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): chromedriver.storage.googleapis.com:443
+DEBUG:urllib3.connectionpool:https://chromedriver.storage.googleapis.com:443 "GET /114.0.5735.90/chromedriver_linux64.zip HTTP/1.1" 200 7407250
+INFO:WDM:Driver downloading response is 200
+INFO:WDM:Get LATEST chromedriver version for google-chrome
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): chromedriver.storage.googleapis.com:443
+DEBUG:urllib3.connectionpool:https://chromedriver.storage.googleapis.com:443 "GET /LATEST_RELEASE HTTP/1.1" 200 13
+INFO:WDM:Get LATEST chromedriver version for google-chrome
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): chromedriver.storage.googleapis.com:443
+DEBUG:urllib3.connectionpool:https://chromedriver.storage.googleapis.com:443 "GET /LATEST_RELEASE HTTP/1.1" 200 13
+INFO:WDM:Driver has been saved in cache [/home/runner/.wdm/drivers/chromedriver/linux64/114.0.5735.90]
+DEBUG:selenium.webdriver.common.driver_finder:Skipping Selenium Manager; path to chrome driver specified in Service class: /home/runner/.wdm/drivers/chromedriver/linux64/114.0.5735.90/chromedriver
+DEBUG:selenium.webdriver.common.service:Started executable: `/home/runner/.wdm/drivers/chromedriver/linux64/114.0.5735.90/chromedriver` in a child process with pid: 5884 using 0 to output -3
+ERROR:routes:Routes: Error en automatización: Message: Service /home/runner/.wdm/drivers/chromedriver/linux64/114.0.5735.90/chromedriver unexpectedly exited. Status code was: 127
+
