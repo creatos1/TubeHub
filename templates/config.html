@@ -8,7 +8,7 @@
         <h1 class="display-5 mb-4">
             <i class="fas fa-cog me-3"></i>Configuración
         </h1>
-        
+
         <div class="alert alert-info">
             <i class="fas fa-info-circle me-2"></i>
             <strong>Importante:</strong> Esta aplicación requiere API keys para funcionar correctamente. Configura las claves necesarias usando los formularios de abajo.
@@ -34,7 +34,7 @@
             </div>
             <div class="card-body">
                 <p>Requerida para obtener metadatos de videos de YouTube.</p>
-                
+
                 <form method="POST" class="mb-3">
                     <input type="hidden" name="action" value="update_youtube">
                     <div class="mb-3">
@@ -55,7 +55,7 @@
                         </button>
                     </div>
                 </form>
-                
+
                 {% if youtube_configured %}
                     <form method="POST" class="mb-3">
                         <input type="hidden" name="action" value="test_youtube">
@@ -66,7 +66,7 @@
                         </div>
                     </form>
                 {% endif %}
-                
+
                 <div class="collapse" id="youtubeInstructions">
                     <div class="border-top pt-3">
                         <h6>Cómo obtener tu API key:</h6>
@@ -79,14 +79,14 @@
                         </ol>
                     </div>
                 </div>
-                
+
                 <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#youtubeInstructions">
                     <i class="fas fa-question-circle me-1"></i>¿Cómo obtener API key?
                 </button>
             </div>
         </div>
     </div>
-    
+
     <!-- Discord Webhook Configuration -->
     <div class="col-lg-6 mb-4">
         <div class="card h-100">
@@ -104,7 +104,7 @@
             </div>
             <div class="card-body">
                 <p>Requerido para enviar notificaciones de videos a canales de Discord.</p>
-                
+
                 <form method="POST" class="mb-3">
                     <input type="hidden" name="action" value="update_discord">
                     <div class="mb-3">
@@ -125,7 +125,7 @@
                         </button>
                     </div>
                 </form>
-                
+
                 {% if discord_configured %}
                     <form method="POST" class="mb-3">
                         <input type="hidden" name="action" value="test_discord">
@@ -136,7 +136,7 @@
                         </div>
                     </form>
                 {% endif %}
-                
+
                 <div class="collapse" id="discordInstructions">
                     <div class="border-top pt-3">
                         <h6>Cómo obtener tu webhook URL:</h6>
@@ -150,15 +150,15 @@
                         </ol>
                     </div>
                 </div>
-                
+
                 <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#discordInstructions">
                     <i class="fas fa-question-circle me-1"></i>¿Cómo obtener webhook?
                 </button>
             </div>
         </div>
     </div>
-    
-    <!-- Facebook Configuration -->
+
+    <!-- Facebook Pages Configuration -->
     <div class="col-lg-6 mb-4">
         <div class="card h-100">
             <div class="card-header">
@@ -175,7 +175,7 @@
             </div>
             <div class="card-body">
                 <p>Requerido para publicar videos en páginas de Facebook que administras.</p>
-                
+
                 <form method="POST" class="mb-3">
                     <input type="hidden" name="action" value="update_facebook">
                     <div class="mb-3">
@@ -214,7 +214,7 @@
                         Si la validación falla pero estás seguro de tus credenciales, usa "Guardar Sin Validación"
                     </small>
                 </form>
-                
+
                 {% if facebook_configured %}
                     <form method="POST" class="mb-3">
                         <input type="hidden" name="action" value="test_facebook">
@@ -225,7 +225,7 @@
                         </div>
                     </form>
                 {% endif %}
-                
+
                 <div class="collapse" id="facebookInstructions">
                     <div class="border-top pt-3">
                         <h6>Cómo obtener tus credenciales:</h6>
@@ -245,16 +245,21 @@
                         </div>
                     </div>
                 </div>
+                
+                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#facebookInstructions">
+                    <i class="fas fa-question-circle me-1"></i>¿Cómo obtener credenciales?
+                </button>
             </div>
         </div>
+    </div>
 
-        <!-- Facebook Groups Automation -->
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <div>
-                    <i class="fab fa-facebook me-2"></i>
-                    <strong>Automatización de Grupos de Facebook</strong>
-                </div>
+    <!-- Facebook Groups Automation -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4 class="card-title mb-0">
+                    <i class="fab fa-facebook me-2"></i>Automatización de Grupos
+                </h4>
                 <div class="mt-2">
                     {% if facebook_groups_configured %}
                         <span class="badge bg-success"><i class="fas fa-check me-1"></i>Configurado ({{ current_groups|length }} grupos)</span>
@@ -265,75 +270,60 @@
             </div>
             <div class="card-body">
                 <p>Automatización para publicar en múltiples grupos de Facebook usando Selenium WebDriver.</p>
-                
+
                 <form method="POST" class="mb-3">
                     <input type="hidden" name="action" value="update_facebook_groups">
-                    
+
                     <div class="mb-3">
                         <label for="facebook_groups" class="form-label">URLs de Grupos de Facebook</label>
                         <textarea class="form-control" 
                                   id="facebook_groups" 
                                   name="facebook_groups" 
-                                  rows="6"
+                                  rows="4"
                                   placeholder="https://www.facebook.com/groups/mi-grupo-1/&#10;https://www.facebook.com/groups/mi-grupo-2/&#10;Una URL por línea"
                                   required>{% for group in current_groups %}{{ group }}{% if not loop.last %}&#10;{% endif %}{% endfor %}</textarea>
                         <div class="form-text">
-                            Ingresa una URL de grupo por línea. Ejemplo: https://www.facebook.com/groups/nombre-del-grupo/
+                            Ingresa una URL de grupo por línea
                         </div>
                     </div>
-                    
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="facebook_email" class="form-label">Email de Facebook (Opcional)</label>
-                            <input type="email" 
-                                   class="form-control" 
-                                   id="facebook_email" 
-                                   name="facebook_email" 
-                                   value="{{ current_email }}"
-                                   placeholder="tu-email@ejemplo.com">
-                            <div class="form-text">
-                                Para login automático (opcional)
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="facebook_password" class="form-label">Contraseña de Facebook (Opcional)</label>
-                            <input type="password" 
-                                   class="form-control" 
-                                   id="facebook_password" 
-                                   name="facebook_password" 
-                                   placeholder="Tu contraseña">
-                            <div class="form-text">
-                                Para login automático (opcional)
-                            </div>
-                        </div>
+
+                    <div class="mb-3">
+                        <label for="facebook_email" class="form-label">Email de Facebook (Opcional)</label>
+                        <input type="email" 
+                               class="form-control" 
+                               id="facebook_email" 
+                               name="facebook_email" 
+                               value="{{ current_email }}"
+                               placeholder="tu-email@ejemplo.com">
+                        <div class="form-text">Para login automático</div>
                     </div>
-                    
-                    <div class="mt-3">
+
+                    <div class="mb-3">
+                        <label for="facebook_password" class="form-label">Contraseña (Opcional)</label>
+                        <input type="password" 
+                               class="form-control" 
+                               id="facebook_password" 
+                               name="facebook_password" 
+                               placeholder="Tu contraseña">
+                        <div class="form-text">Para login automático</div>
+                    </div>
+
+                    <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>Guardar Configuración
                         </button>
                     </div>
                 </form>
-                
-                <div class="alert alert-info">
+
+                <div class="alert alert-info small">
                     <i class="fas fa-info-circle me-2"></i>
-                    <strong>Cómo funciona:</strong>
-                    <ul class="mb-0 mt-2">
-                        <li>Se abre una ventana de Chrome automáticamente</li>
-                        <li>Si no proporcionas credenciales, deberás iniciar sesión manualmente</li>
-                        <li>La automatización visitará cada grupo y publicará el contenido</li>
-                        <li>Habrá pausas entre publicaciones para evitar ser detectado como spam</li>
-                    </ul>
+                    <strong>Funcionalidad:</strong> Automatización con Chrome para publicar en grupos configurados
                 </div>
-                
-                <div class="alert alert-warning">
+
+                <div class="alert alert-warning small">
                     <i class="fas fa-exclamation-triangle me-2"></i>
-                    <strong>Importante:</strong> Asegúrate de ser miembro de todos los grupos donde quieres publicar y de seguir las reglas de cada grupo.
+                    <strong>Importante:</strong> Debes ser miembro de todos los grupos
                 </div>
-                
-                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#facebookInstructions">
-                    <i class="fas fa-question-circle me-1"></i>¿Cómo obtener credenciales?
-                </button>
             </div>
         </div>
     </div>
@@ -356,14 +346,14 @@
                     <li><strong>Error de Facebook:</strong> Asegúrate de tener los permisos correctos y ser miembro del grupo. Los tokens de Facebook expiran periódicamente.</li>
                     <li><strong>Errores de base de datos:</strong> La base de datos SQLite se crea automáticamente. Si persisten los problemas, reinicia la aplicación.</li>
                 </ul>
-                
+
                 <h5>Probando tu configuración:</h5>
                 <ol>
                     <li>Después de configurar ambas claves, usa los botones de prueba arriba</li>
                     <li>Intenta agregar un video de YouTube usando la página "Agregar Video"</li>
                     <li>Si es exitoso, intenta enviarlo a Discord</li>
                 </ol>
-                
+
                 <div class="alert alert-success mt-3">
                     <i class="fas fa-lightbulb me-2"></i>
                     <strong>Consejo:</strong> También puedes copiar mensajes formateados para compartir manualmente en grupos de Facebook, Twitter u otras plataformas sociales donde no está disponible el posting automático.
