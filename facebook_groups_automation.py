@@ -25,8 +25,8 @@ class FacebookGroupsAutomation:
         logger.info("FacebookGroupsAutomation: Configurando Chrome WebDriver")
         
         chrome_options = Options()
-        # Configuraciones esenciales para entornos como Replit
-        chrome_options.add_argument("--headless")  # Ejecutar sin interfaz gráfica
+        # Para desarrollo local, puedes comentar --headless para ver el navegador
+        # chrome_options.add_argument("--headless")  # Descomenta para ejecutar sin interfaz gráfica
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-gpu")
