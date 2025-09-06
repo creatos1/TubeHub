@@ -163,7 +163,7 @@
         <div class="card h-100">
             <div class="card-header">
                 <h4 class="card-title mb-0">
-                    <i class="fab fa-facebook me-2"></i>Facebook Groups
+                    <i class="fab fa-facebook me-2"></i>Facebook Pages
                 </h4>
                 <div class="mt-2">
                     {% if facebook_configured %}
@@ -174,7 +174,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <p>Requerido para publicar videos en grupos de Facebook donde eres miembro.</p>
+                <p>Requerido para publicar videos en páginas de Facebook que administras.</p>
                 
                 <form method="POST" class="mb-3">
                     <input type="hidden" name="action" value="update_facebook">
@@ -187,19 +187,19 @@
                                placeholder="Pega tu Facebook Access Token aquí"
                                required>
                         <div class="form-text">
-                            Token de acceso con permisos para publicar en grupos
+                            Token de acceso con permisos pages_manage_posts
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="facebook_group_id" class="form-label">Facebook Group ID</label>
+                        <label for="facebook_page_id" class="form-label">Facebook Page ID</label>
                         <input type="text" 
                                class="form-control" 
-                               id="facebook_group_id" 
-                               name="facebook_group_id" 
-                               placeholder="438961312856471 o https://www.facebook.com/groups/438961312856471"
+                               id="facebook_page_id" 
+                               name="facebook_page_id" 
+                               placeholder="123456789 o Mi Página"
                                required>
                         <div class="form-text">
-                            Puedes usar el ID numérico del grupo o pegar la URL completa del grupo
+                            Puedes usar el ID numérico de la página o el nombre de la página
                         </div>
                     </div>
                     <div class="d-grid gap-2">
@@ -231,17 +231,17 @@
                         <h6>Cómo obtener tus credenciales:</h6>
                         <ol class="small">
                             <li>Ve a <a href="https://developers.facebook.com/" target="_blank">Facebook for Developers</a></li>
-                            <li>Crea una app y obtén un access token con permisos de "groups_access_member_info" y "publish_to_groups"</li>
-                            <li>Para obtener el Group ID:
+                            <li>Crea una app y obtén un access token con permisos de "pages_manage_posts" y "pages_read_engagement"</li>
+                            <li>Para obtener el Page ID:
                                 <ul>
-                                    <li>Ve al grupo en Facebook</li>
-                                    <li>En la URL verás algo como facebook.com/groups/123456789</li>
-                                    <li>El número al final (123456789) es tu Group ID</li>
+                                    <li>Ve a tu página de Facebook</li>
+                                    <li>Ve a Configuración → Información de la página</li>
+                                    <li>Copia el "ID de página" o usa el nombre de la página</li>
                                 </ul>
                             </li>
                         </ol>
                         <div class="alert alert-warning small">
-                            <strong>Importante:</strong> Asegúrate de que tu access token tenga los permisos necesarios y que seas miembro del grupo donde quieres publicar.
+                            <strong>Importante:</strong> Asegúrate de que tu access token tenga los permisos necesarios y que seas administrador de la página donde quieres publicar.
                         </div>
                     </div>
                 </div>

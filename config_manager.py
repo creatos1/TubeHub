@@ -107,13 +107,13 @@ class ConfigManager:
             return False, f"Error de conexión: {str(e)}"
     
     @staticmethod
-    def test_facebook_credentials(access_token, group_id):
+    def test_facebook_credentials(access_token, page_id):
         """Prueba las credenciales de Facebook"""
         try:
             logger.info("ConfigManager: Probando credenciales de Facebook")
             from facebook_api import FacebookAPI
             
-            return FacebookAPI.test_facebook_credentials(access_token, group_id)
+            return FacebookAPI.test_facebook_credentials(access_token, page_id)
             
         except Exception as e:
             logger.error(f"ConfigManager: Error al probar Facebook credentials: {e}")

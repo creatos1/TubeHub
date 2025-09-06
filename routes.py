@@ -259,25 +259,25 @@ def config():
         
         elif action == 'update_facebook':
             access_token = request.form.get('facebook_access_token', '').strip()
-            group_id = request.form.get('facebook_group_id', '').strip()
+            page_id = request.form.get('facebook_page_id', '').strip()
             force_save = request.form.get('force_save') == 'true'
             logger.info("Routes: Actualizando credenciales de Facebook")
             
-            if access_token and group_id:
+            if access_token and page_id:
                 if force_save:
                     # Guardar sin validación
                     logger.info("Routes: Guardando credenciales de Facebook sin validación")
                     ConfigManager.set_config('FB_ACCESS_TOKEN', access_token)
-                    ConfigManager.set_config('FB_GROUP_ID', group_id)
+                    ConfigManager.set_config('FB_PAGE_ID', page_id)
                     flash('Credenciales de Facebook guardadas (sin validación). Usa "Probar Credenciales" para verificar que funcionen.', 'warning')
                 else:
                     # Test the credentials
                     logger.info("Routes: Probando credenciales de Facebook")
-                    is_valid, message = ConfigManager.test_facebook_credentials(access_token, group_id)
+                    is_valid, message = ConfigManager.test_facebook_credentials(access_token, page_id)
                     
                     if is_valid:
                         ConfigManager.set_config('FB_ACCESS_TOKEN', access_token)
-                        ConfigManager.set_config('FB_GROUP_ID', group_id)
+                        ConfigManager.set_config('FB_PAGE_ID', page_id)
                         logger.info("Routes: Credenciales de Facebook guardadas exitosamente")
                         flash(f'Facebook configurado exitosamente: {message}', 'success')
                     else:
@@ -285,14 +285,14 @@ def config():
                         flash(f'Error con credenciales de Facebook: {message}. Si estás seguro de que son correctas, puedes guardarlas sin validación.', 'error')
             else:
                 logger.warning("Routes: Credenciales de Facebook incompletas")
-                flash('Ambos campos (Access Token y Group ID) son requeridos', 'error')
+                flash('Ambos campos (Access Token y Page ID) son requeridos', 'error')
         
         elif action == 'test_facebook':
             logger.info("Routes: Probando credenciales de Facebook existentes")
             access_token = ConfigManager.get_config('FB_ACCESS_TOKEN')
-            group_id = ConfigManager.get_config('FB_GROUP_ID')
-            if access_token and group_id:
-                is_valid, message = ConfigManager.test_facebook_credentials(access_token, group_id)
+            page_id = ConfigManager.get_config('FB_PAGE_ID')
+            if access_token and page_id:
+                is_valid, message = ConfigManager.test_facebook_credentials(access_token, page_id)
                 flash(f'Prueba Facebook: {message}', 'success' if is_valid else 'error')
             else:
                 flash('No hay credenciales de Facebook configuradas', 'error')
@@ -301,7 +301,7 @@ def config():
     youtube_configured = ConfigManager.get_config('YT_API_KEY') is not None
     discord_configured = ConfigManager.get_config('DISCORD_WEBHOOK') is not None
     facebook_configured = (ConfigManager.get_config('FB_ACCESS_TOKEN') is not None and 
-                          ConfigManager.get_config('FB_GROUP_ID') is not None)
+                          ConfigManager.get_config('FB_PAGE_ID') is not None)
     
     logger.info(f"Routes: Estado de configuración - YouTube: {youtube_configured}, Discord: {discord_configured}, Facebook: {facebook_configured}")
     
