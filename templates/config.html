@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}Configuration - YouTube Hub{% endblock %}
+{% block title %}Configuración - YouTube Hub{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-12">
         <h1 class="display-5 mb-4">
-            <i class="fas fa-cog me-3"></i>Configuration
+            <i class="fas fa-cog me-3"></i>Configuración
         </h1>
         
         <div class="alert alert-info">
             <i class="fas fa-info-circle me-2"></i>
-            <strong>Important:</strong> This application requires API keys to function properly. Follow the instructions below to set them up.
+            <strong>Importante:</strong> Esta aplicación requiere API keys para funcionar correctamente. Configura las claves necesarias usando los formularios de abajo.
         </div>
     </div>
 </div>
@@ -24,37 +24,65 @@
                 <h4 class="card-title mb-0">
                     <i class="fab fa-youtube me-2"></i>YouTube Data API
                 </h4>
-            </div>
-            <div class="card-body">
-                <p>Required for fetching video metadata from YouTube.</p>
-                
-                <h5>How to get your API key:</h5>
-                <ol>
-                    <li>Go to the <a href="https://console.developers.google.com/" target="_blank" class="text-decoration-none">Google Developers Console</a></li>
-                    <li>Create a new project or select an existing one</li>
-                    <li>Enable the <strong>YouTube Data API v3</strong></li>
-                    <li>Go to "Credentials" and create an API key</li>
-                    <li>Copy the API key</li>
-                </ol>
-                
-                <h5>Setting up in Replit:</h5>
-                <ol>
-                    <li>Click on "Secrets" tab in the left sidebar</li>
-                    <li>Click "New Secret"</li>
-                    <li>Set key as: <code>YT_API_KEY</code></li>
-                    <li>Paste your YouTube API key as the value</li>
-                    <li>Click "Add Secret"</li>
-                </ol>
-                
-                <div class="alert alert-warning mt-3">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    <strong>Status:</strong> 
-                    {% if config.get('YT_API_KEY') %}
-                        <span class="text-success">✓ Configured</span>
+                <div class="mt-2">
+                    {% if youtube_configured %}
+                        <span class="badge bg-success"><i class="fas fa-check me-1"></i>Configurada</span>
                     {% else %}
-                        <span class="text-danger">✗ Not configured</span>
+                        <span class="badge bg-danger"><i class="fas fa-times me-1"></i>No configurada</span>
                     {% endif %}
                 </div>
+            </div>
+            <div class="card-body">
+                <p>Requerida para obtener metadatos de videos de YouTube.</p>
+                
+                <form method="POST" class="mb-3">
+                    <input type="hidden" name="action" value="update_youtube">
+                    <div class="mb-3">
+                        <label for="youtube_api_key" class="form-label">YouTube API Key</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="youtube_api_key" 
+                               name="youtube_api_key" 
+                               placeholder="Pega tu YouTube API key aquí"
+                               required>
+                        <div class="form-text">
+                            La clave se probará automáticamente antes de guardarla
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Guardar y Probar
+                        </button>
+                    </div>
+                </form>
+                
+                {% if youtube_configured %}
+                    <form method="POST" class="mb-3">
+                        <input type="hidden" name="action" value="test_youtube">
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-outline-info">
+                                <i class="fas fa-vial me-2"></i>Probar API Key Actual
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
+                
+                <div class="collapse" id="youtubeInstructions">
+                    <div class="border-top pt-3">
+                        <h6>Cómo obtener tu API key:</h6>
+                        <ol class="small">
+                            <li>Ve a <a href="https://console.developers.google.com/" target="_blank">Google Developers Console</a></li>
+                            <li>Crea un proyecto nuevo o selecciona uno existente</li>
+                            <li>Habilita la <strong>YouTube Data API v3</strong></li>
+                            <li>Ve a "Credentials" y crea una API key</li>
+                            <li>Copia la API key</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#youtubeInstructions">
+                    <i class="fas fa-question-circle me-1"></i>¿Cómo obtener API key?
+                </button>
             </div>
         </div>
     </div>
@@ -66,38 +94,66 @@
                 <h4 class="card-title mb-0">
                     <i class="fab fa-discord me-2"></i>Discord Webhook
                 </h4>
-            </div>
-            <div class="card-body">
-                <p>Required for sending video notifications to Discord channels.</p>
-                
-                <h5>How to get your webhook URL:</h5>
-                <ol>
-                    <li>Open Discord and go to your server</li>
-                    <li>Right-click on the channel where you want notifications</li>
-                    <li>Select "Edit Channel" → "Integrations" → "Webhooks"</li>
-                    <li>Click "New Webhook"</li>
-                    <li>Give it a name (e.g., "YouTube Hub")</li>
-                    <li>Copy the webhook URL</li>
-                </ol>
-                
-                <h5>Setting up in Replit:</h5>
-                <ol>
-                    <li>Click on "Secrets" tab in the left sidebar</li>
-                    <li>Click "New Secret"</li>
-                    <li>Set key as: <code>DISCORD_WEBHOOK</code></li>
-                    <li>Paste your Discord webhook URL as the value</li>
-                    <li>Click "Add Secret"</li>
-                </ol>
-                
-                <div class="alert alert-warning mt-3">
-                    <i class="fas fa-exclamation-triangle me-2"></i>
-                    <strong>Status:</strong> 
-                    {% if config.get('DISCORD_WEBHOOK') %}
-                        <span class="text-success">✓ Configured</span>
+                <div class="mt-2">
+                    {% if discord_configured %}
+                        <span class="badge bg-success"><i class="fas fa-check me-1"></i>Configurado</span>
                     {% else %}
-                        <span class="text-danger">✗ Not configured</span>
+                        <span class="badge bg-danger"><i class="fas fa-times me-1"></i>No configurado</span>
                     {% endif %}
                 </div>
+            </div>
+            <div class="card-body">
+                <p>Requerido para enviar notificaciones de videos a canales de Discord.</p>
+                
+                <form method="POST" class="mb-3">
+                    <input type="hidden" name="action" value="update_discord">
+                    <div class="mb-3">
+                        <label for="discord_webhook" class="form-label">Discord Webhook URL</label>
+                        <input type="url" 
+                               class="form-control" 
+                               id="discord_webhook" 
+                               name="discord_webhook" 
+                               placeholder="https://discord.com/api/webhooks/..."
+                               required>
+                        <div class="form-text">
+                            El webhook se probará automáticamente antes de guardarlo
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Guardar y Probar
+                        </button>
+                    </div>
+                </form>
+                
+                {% if discord_configured %}
+                    <form method="POST" class="mb-3">
+                        <input type="hidden" name="action" value="test_discord">
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-outline-info">
+                                <i class="fas fa-vial me-2"></i>Probar Webhook Actual
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
+                
+                <div class="collapse" id="discordInstructions">
+                    <div class="border-top pt-3">
+                        <h6>Cómo obtener tu webhook URL:</h6>
+                        <ol class="small">
+                            <li>Abre Discord y ve a tu servidor</li>
+                            <li>Haz clic derecho en el canal donde quieres las notificaciones</li>
+                            <li>Selecciona "Edit Channel" → "Integrations" → "Webhooks"</li>
+                            <li>Haz clic en "New Webhook"</li>
+                            <li>Dale un nombre (ej: "YouTube Hub")</li>
+                            <li>Copia la webhook URL</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#discordInstructions">
+                    <i class="fas fa-question-circle me-1"></i>¿Cómo obtener webhook?
+                </button>
             </div>
         </div>
     </div>
@@ -108,28 +164,28 @@
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title mb-0">
-                    <i class="fas fa-question-circle me-2"></i>Troubleshooting
+                    <i class="fas fa-question-circle me-2"></i>Solución de Problemas
                 </h4>
             </div>
             <div class="card-body">
-                <h5>Common Issues:</h5>
+                <h5>Problemas Comunes:</h5>
                 <ul>
-                    <li><strong>YouTube API quota exceeded:</strong> YouTube API has daily usage limits. If you exceed them, wait 24 hours or consider requesting a quota increase.</li>
-                    <li><strong>Video not found:</strong> Make sure the video is public and the URL is correct.</li>
-                    <li><strong>Discord webhook failed:</strong> Check that the webhook URL is correct and the channel still exists.</li>
-                    <li><strong>Database errors:</strong> The SQLite database is created automatically. If issues persist, restart the application.</li>
+                    <li><strong>Cuota de YouTube API excedida:</strong> La API de YouTube tiene límites diarios. Si los excedes, espera 24 horas o solicita un aumento de cuota.</li>
+                    <li><strong>Video no encontrado:</strong> Asegúrate de que el video sea público y la URL sea correcta.</li>
+                    <li><strong>Webhook de Discord falló:</strong> Verifica que la URL del webhook sea correcta y el canal aún exista.</li>
+                    <li><strong>Errores de base de datos:</strong> La base de datos SQLite se crea automáticamente. Si persisten los problemas, reinicia la aplicación.</li>
                 </ul>
                 
-                <h5>Testing your setup:</h5>
+                <h5>Probando tu configuración:</h5>
                 <ol>
-                    <li>After setting up both secrets, restart your Replit</li>
-                    <li>Try adding a YouTube video using the "Add Video" page</li>
-                    <li>If successful, try sending it to Discord</li>
+                    <li>Después de configurar ambas claves, usa los botones de prueba arriba</li>
+                    <li>Intenta agregar un video de YouTube usando la página "Agregar Video"</li>
+                    <li>Si es exitoso, intenta enviarlo a Discord</li>
                 </ol>
                 
                 <div class="alert alert-success mt-3">
                     <i class="fas fa-lightbulb me-2"></i>
-                    <strong>Tip:</strong> You can also copy formatted messages for manual sharing on Facebook groups, Twitter, or other social platforms where API posting isn't available.
+                    <strong>Consejo:</strong> También puedes copiar mensajes formateados para compartir manualmente en grupos de Facebook, Twitter u otras plataformas sociales donde no está disponible el posting automático.
                 </div>
             </div>
         </div>

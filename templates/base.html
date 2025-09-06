@@ -30,17 +30,17 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('index') }}">
-                            <i class="fas fa-home me-1"></i>Home
+                            <i class="fas fa-home me-1"></i>Inicio
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('add_video') }}">
-                            <i class="fas fa-plus me-1"></i>Add Video
+                            <i class="fas fa-plus me-1"></i>Agregar Video
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('config') }}">
-                            <i class="fas fa-cog me-1"></i>Configuration
+                            <i class="fas fa-cog me-1"></i>Configuración
                         </a>
                     </li>
                 </ul>
@@ -72,7 +72,7 @@
         <div class="container text-center">
             <p class="mb-0">
                 <i class="fab fa-youtube me-2"></i>
-                YouTube Hub - Your Personal Video Collection
+                YouTube Hub - Tu Colección Personal de Videos
             </p>
         </div>
     </footer>
@@ -89,7 +89,7 @@
                 toast.innerHTML = `
                     <div class="d-flex">
                         <div class="toast-body">
-                            <i class="fas fa-check me-2"></i>Copied to clipboard!
+                            <i class="fas fa-check me-2"></i>¡Copiado al portapapeles!
                         </div>
                         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
                     </div>
@@ -104,7 +104,7 @@
                 });
             }).catch(function(err) {
                 console.error('Could not copy text: ', err);
-                alert('Failed to copy to clipboard');
+                alert('Error al copiar al portapapeles');
             });
         }
 
@@ -117,7 +117,7 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Failed to get formatted message');
+                    alert('Error al obtener mensaje formateado');
                 });
         }
     </script>

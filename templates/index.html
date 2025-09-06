@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}YouTube Hub - Home{% endblock %}
+{% block title %}YouTube Hub - Inicio{% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="col-12">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="display-5">
-                <i class="fab fa-youtube me-3"></i>Your Video Collection
+                <i class="fab fa-youtube me-3"></i>Tu Colección de Videos
             </h1>
             <a href="{{ url_for('add_video') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-2"></i>Add Video
+                <i class="fas fa-plus me-2"></i>Agregar Video
             </a>
         </div>
 
@@ -40,12 +40,12 @@
                             <div class="d-grid gap-2">
                                 <!-- Watch on YouTube -->
                                 <a href="{{ video.youtube_url }}" target="_blank" class="btn btn-danger">
-                                    <i class="fab fa-youtube me-2"></i>Watch on YouTube
+                                    <i class="fab fa-youtube me-2"></i>Ver en YouTube
                                 </a>
                                 
                                 <!-- Copy formatted message -->
                                 <button type="button" class="btn btn-outline-secondary" onclick="copyFormattedMessage({{ video.id }})">
-                                    <i class="fas fa-copy me-2"></i>Copy Message
+                                    <i class="fas fa-copy me-2"></i>Copiar Mensaje
                                 </button>
                                 
                                 <div class="row g-2">
@@ -53,7 +53,7 @@
                                     <div class="col-8">
                                         <form method="POST" action="{{ url_for('send_to_discord', video_id=video.id) }}" class="d-inline">
                                             <button type="submit" class="btn btn-info w-100">
-                                                <i class="fab fa-discord me-2"></i>Send to Discord
+                                                <i class="fab fa-discord me-2"></i>Enviar a Discord
                                             </button>
                                         </form>
                                     </div>
@@ -72,7 +72,7 @@
                         </div>
                         
                         <div class="card-footer text-muted small">
-                            Added: {{ video.added_at.strftime('%Y-%m-%d %H:%M') }}
+                            Agregado: {{ video.added_at.strftime('%Y-%m-%d %H:%M') }}
                         </div>
                     </div>
                 </div>
@@ -81,10 +81,10 @@
         {% else %}
             <div class="text-center py-5">
                 <i class="fab fa-youtube fa-5x text-muted mb-4"></i>
-                <h3 class="text-muted mb-3">No videos yet</h3>
-                <p class="text-muted mb-4">Start building your personal YouTube collection by adding your first video!</p>
+                <h3 class="text-muted mb-3">No hay videos aún</h3>
+                <p class="text-muted mb-4">¡Comienza a construir tu colección personal de YouTube agregando tu primer video!</p>
                 <a href="{{ url_for('add_video') }}" class="btn btn-primary btn-lg">
-                    <i class="fas fa-plus me-2"></i>Add Your First Video
+                    <i class="fas fa-plus me-2"></i>Agregar Tu Primer Video
                 </a>
             </div>
         {% endif %}
