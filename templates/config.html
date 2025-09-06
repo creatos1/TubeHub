@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}Configuration - YouTube Hub{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1 class="display-5 mb-4">
+            <i class="fas fa-cog me-3"></i>Configuration
+        </h1>
+        
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            <strong>Important:</strong> This application requires API keys to function properly. Follow the instructions below to set them up.
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- YouTube API Configuration -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4 class="card-title mb-0">
+                    <i class="fab fa-youtube me-2"></i>YouTube Data API
+                </h4>
+            </div>
+            <div class="card-body">
+                <p>Required for fetching video metadata from YouTube.</p>
+                
+                <h5>How to get your API key:</h5>
+                <ol>
+                    <li>Go to the <a href="https://console.developers.google.com/" target="_blank" class="text-decoration-none">Google Developers Console</a></li>
+                    <li>Create a new project or select an existing one</li>
+                    <li>Enable the <strong>YouTube Data API v3</strong></li>
+                    <li>Go to "Credentials" and create an API key</li>
+                    <li>Copy the API key</li>
+                </ol>
+                
+                <h5>Setting up in Replit:</h5>
+                <ol>
+                    <li>Click on "Secrets" tab in the left sidebar</li>
+                    <li>Click "New Secret"</li>
+                    <li>Set key as: <code>YT_API_KEY</code></li>
+                    <li>Paste your YouTube API key as the value</li>
+                    <li>Click "Add Secret"</li>
+                </ol>
+                
+                <div class="alert alert-warning mt-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Status:</strong> 
+                    {% if config.get('YT_API_KEY') %}
+                        <span class="text-success">✓ Configured</span>
+                    {% else %}
+                        <span class="text-danger">✗ Not configured</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Discord Webhook Configuration -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4 class="card-title mb-0">
+                    <i class="fab fa-discord me-2"></i>Discord Webhook
+                </h4>
+            </div>
+            <div class="card-body">
+                <p>Required for sending video notifications to Discord channels.</p>
+                
+                <h5>How to get your webhook URL:</h5>
+                <ol>
+                    <li>Open Discord and go to your server</li>
+                    <li>Right-click on the channel where you want notifications</li>
+                    <li>Select "Edit Channel" → "Integrations" → "Webhooks"</li>
+                    <li>Click "New Webhook"</li>
+                    <li>Give it a name (e.g., "YouTube Hub")</li>
+                    <li>Copy the webhook URL</li>
+                </ol>
+                
+                <h5>Setting up in Replit:</h5>
+                <ol>
+                    <li>Click on "Secrets" tab in the left sidebar</li>
+                    <li>Click "New Secret"</li>
+                    <li>Set key as: <code>DISCORD_WEBHOOK</code></li>
+                    <li>Paste your Discord webhook URL as the value</li>
+                    <li>Click "Add Secret"</li>
+                </ol>
+                
+                <div class="alert alert-warning mt-3">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Status:</strong> 
+                    {% if config.get('DISCORD_WEBHOOK') %}
+                        <span class="text-success">✓ Configured</span>
+                    {% else %}
+                        <span class="text-danger">✗ Not configured</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-question-circle me-2"></i>Troubleshooting
+                </h4>
+            </div>
+            <div class="card-body">
+                <h5>Common Issues:</h5>
+                <ul>
+                    <li><strong>YouTube API quota exceeded:</strong> YouTube API has daily usage limits. If you exceed them, wait 24 hours or consider requesting a quota increase.</li>
+                    <li><strong>Video not found:</strong> Make sure the video is public and the URL is correct.</li>
+                    <li><strong>Discord webhook failed:</strong> Check that the webhook URL is correct and the channel still exists.</li>
+                    <li><strong>Database errors:</strong> The SQLite database is created automatically. If issues persist, restart the application.</li>
+                </ul>
+                
+                <h5>Testing your setup:</h5>
+                <ol>
+                    <li>After setting up both secrets, restart your Replit</li>
+                    <li>Try adding a YouTube video using the "Add Video" page</li>
+                    <li>If successful, try sending it to Discord</li>
+                </ol>
+                
+                <div class="alert alert-success mt-3">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    <strong>Tip:</strong> You can also copy formatted messages for manual sharing on Facebook groups, Twitter, or other social platforms where API posting isn't available.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
