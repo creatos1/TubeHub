@@ -1,6 +1,16 @@
 from app import db
 from datetime import datetime
 
+class Config(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    key_name = db.Column(db.String(50), unique=True, nullable=False)
+    key_value = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    def __repr__(self):
+        return f'<Config {self.key_name}>'
+
 class Video(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     youtube_id = db.Column(db.String(20), unique=True, nullable=False)
