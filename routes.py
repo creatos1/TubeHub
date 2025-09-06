@@ -198,6 +198,7 @@ def send_to_facebook_groups(video_id):
             
             try:
                 groups_automation.setup_driver()
+                logger.info("Routes: WebDriver configurado exitosamente")
                 
                 # Obtener credenciales de login si están configuradas
                 email, password = ConfigManager.get_facebook_credentials()
@@ -214,9 +215,16 @@ def send_to_facebook_groups(video_id):
                     
             except Exception as e:
                 logger.error(f"Routes: Error en automatización: {e}")
+                if "Status code was: 127" in str(e):
+                    logger.error("Routes: Error de dependencias del sistema - Chrome no puede ejecutarse")
+                elif "chromedriver" in str(e).lower():
+                    logger.error("Routes: Error del ChromeDriver")
+                else:
+                    logger.error(f"Routes: Error general: {type(e).__name__}")
             finally:
-                groups_automation.close_driver()
-                groups_automation = None
+                if groups_automation:
+                    groups_automation.close_driver()
+                    groups_automation = None
         
         # Iniciar en hilo separado
         automation_thread = threading.Thread(target=run_automation)

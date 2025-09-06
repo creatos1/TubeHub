@@ -25,19 +25,32 @@ class FacebookGroupsAutomation:
         logger.info("FacebookGroupsAutomation: Configurando Chrome WebDriver")
         
         chrome_options = Options()
+        # Configuraciones esenciales para entornos como Replit
+        chrome_options.add_argument("--headless")  # Ejecutar sin interfaz gráfica
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--disable-extensions")
+        chrome_options.add_argument("--disable-background-timer-throttling")
+        chrome_options.add_argument("--disable-backgrounding-occluded-windows")
+        chrome_options.add_argument("--disable-renderer-backgrounding")
+        chrome_options.add_argument("--disable-features=TranslateUI")
+        chrome_options.add_argument("--disable-ipc-flooding-protection")
         chrome_options.add_argument("--window-size=1920,1080")
+        chrome_options.add_argument("--remote-debugging-port=9222")
         
-        # Para desarrollo, no usar headless para ver el proceso
-        # chrome_options.add_argument("--headless")
+        # User agent para evitar detección
+        chrome_options.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
         
-        service = Service(ChromeDriverManager().install())
-        self.driver = webdriver.Chrome(service=service, options=chrome_options)
-        self.wait = WebDriverWait(self.driver, 20)
-        
-        logger.info("FacebookGroupsAutomation: Driver configurado exitosamente")
+        try:
+            service = Service(ChromeDriverManager().install())
+            self.driver = webdriver.Chrome(service=service, options=chrome_options)
+            self.wait = WebDriverWait(self.driver, 30)
+            
+            logger.info("FacebookGroupsAutomation: Driver configurado exitosamente")
+        except Exception as e:
+            logger.error(f"FacebookGroupsAutomation: Error configurando driver: {e}")
+            raise Exception(f"No se pudo configurar Chrome WebDriver: {e}")
         
     def login_facebook(self, email=None, password=None):
         """Inicia sesión en Facebook"""
