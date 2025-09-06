@@ -21,15 +21,18 @@ class FacebookAPI:
         
         # Refresh credentials from database
         self.access_token = ConfigManager.get_config('FB_ACCESS_TOKEN')
-        self.group_id = ConfigManager.get_config('FB_GROUP_ID')
+        group_input = ConfigManager.get_config('FB_GROUP_ID')
         
         if not self.access_token:
             logger.error("FacebookAPI: Access token no configurado")
             raise ValueError("Facebook access token no configurado. Configúralo en la página de Configuración.")
         
-        if not self.group_id:
+        if not group_input:
             logger.error("FacebookAPI: Group ID no configurado")
             raise ValueError("Facebook Group ID no configurado. Configúralo en la página de Configuración.")
+        
+        # Extraer el Group ID correcto
+        self.group_id = self.extract_group_id(group_input)
         
         url = f"{self.base_url}/{self.group_id}/feed"
         
@@ -92,9 +95,42 @@ class FacebookAPI:
         return self.post_to_group(message, video.youtube_url)
     
     @staticmethod
-    def test_facebook_credentials(access_token, group_id):
+    def extract_group_id(group_input):
+        """Extrae el ID numérico del grupo desde una URL o ID directo"""
+        logger.info(f"FacebookAPI: Extrayendo Group ID de: {group_input}")
+        
+        # Si ya es un ID numérico, devolverlo
+        if group_input.isdigit():
+            logger.info(f"FacebookAPI: ID numérico detectado: {group_input}")
+            return group_input
+        
+        # Intentar extraer de URLs de Facebook
+        import re
+        patterns = [
+            r'facebook\.com/groups/(\d+)',
+            r'facebook\.com/groups/(\w+)',
+            r'/groups/(\d+)',
+            r'/groups/(\w+)'
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, group_input)
+            if match:
+                extracted_id = match.group(1)
+                logger.info(f"FacebookAPI: ID extraído de URL: {extracted_id}")
+                return extracted_id
+        
+        # Si no se puede extraer, devolver el input original
+        logger.warning(f"FacebookAPI: No se pudo extraer ID, usando input original: {group_input}")
+        return group_input
+
+    @staticmethod
+    def test_facebook_credentials(access_token, group_input):
         """Prueba las credenciales de Facebook"""
         logger.info("FacebookAPI: Probando credenciales de Facebook")
+        
+        # Extraer el Group ID correcto
+        group_id = FacebookAPI.extract_group_id(group_input)
         
         try:
             # Primero verificar que el token sea válido
@@ -121,6 +157,7 @@ class FacebookAPI:
                 'fields': 'name,privacy'
             }
             
+            logger.info(f"FacebookAPI: Consultando grupo con ID: {group_id}")
             group_response = requests.get(group_url, params=group_params, timeout=10)
             logger.info(f"FacebookAPI: Verificación de grupo - HTTP {group_response.status_code}")
             
@@ -133,7 +170,12 @@ class FacebookAPI:
                 error_data = group_response.json() if group_response.headers.get('content-type', '').startswith('application/json') else {}
                 error_message = error_data.get('error', {}).get('message', 'No se puede acceder al grupo')
                 logger.error(f"FacebookAPI: Error accediendo al grupo: {error_message}")
-                return False, f"Error accediendo al grupo: {error_message}"
+                
+                # Sugerir usar solo el ID numérico si detectamos una URL
+                if 'facebook.com' in group_input:
+                    return False, f"Error: Usa solo el ID numérico del grupo (ej: {group_id}), no la URL completa"
+                else:
+                    return False, f"Error accediendo al grupo: {error_message}"
                 
         except requests.RequestException as e:
             logger.error(f"FacebookAPI: Error de conexión: {e}")
