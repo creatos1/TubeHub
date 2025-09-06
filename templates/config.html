@@ -206,7 +206,13 @@
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save me-2"></i>Guardar y Probar
                         </button>
+                        <button type="submit" name="force_save" value="true" class="btn btn-outline-warning">
+                            <i class="fas fa-save me-2"></i>Guardar Sin Validación
+                        </button>
                     </div>
+                    <small class="text-muted">
+                        Si la validación falla pero estás seguro de tus credenciales, usa "Guardar Sin Validación"
+                    </small>
                 </form>
                 
                 {% if facebook_configured %}

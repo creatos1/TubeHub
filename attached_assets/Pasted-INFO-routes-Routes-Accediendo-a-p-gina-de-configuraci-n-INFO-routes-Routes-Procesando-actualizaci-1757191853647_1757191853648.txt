@@ -1,0 +1,26 @@
+INFO:routes:Routes: Accediendo a página de configuración
+INFO:routes:Routes: Procesando actualización de configuración
+INFO:routes:Routes: Acción recibida: update_facebook
+INFO:routes:Routes: Actualizando credenciales de Facebook
+INFO:routes:Routes: Probando credenciales de Facebook
+INFO:config_manager:ConfigManager: Probando credenciales de Facebook
+INFO:facebook_api:FacebookAPI: Probando credenciales de Facebook
+INFO:facebook_api:FacebookAPI: Extrayendo Group ID de: 438961312856471
+INFO:facebook_api:FacebookAPI: ID numérico detectado: 438961312856471
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): graph.facebook.com:443
+DEBUG:urllib3.connectionpool:https://graph.facebook.com:443 "GET /v18.0/me?access_token=EAAZAwbSLkRD4BPQJymWDsuOabokCeCCAaBiZBXG23YzlMtxk7ocDU2ieQdl7EW691wsFHS4kJhXYTmsX3PRykOSmYD3t83Xj4eLdJBNlm6ynkGBdnxtbEmZC2eN4RqDrRSf8kPki8KDRXcVM3T0qYrVR7MRzH5pI6HJzTWAgXLJUr2A05ZCf3BiT6U4HxysZB HTTP/1.1" 200 47
+INFO:facebook_api:FacebookAPI: Verificación de token - HTTP 200
+INFO:facebook_api:FacebookAPI: Token válido para usuario: Ian Rodriguez
+INFO:facebook_api:FacebookAPI: Consultando grupo con ID: 438961312856471
+DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): graph.facebook.com:443
+DEBUG:urllib3.connectionpool:https://graph.facebook.com:443 "GET /v18.0/438961312856471?access_token=EAAZAwbSLkRD4BPQJymWDsuOabokCeCCAaBiZBXG23YzlMtxk7ocDU2ieQdl7EW691wsFHS4kJhXYTmsX3PRykOSmYD3t83Xj4eLdJBNlm6ynkGBdnxtbEmZC2eN4RqDrRSf8kPki8KDRXcVM3T0qYrVR7MRzH5pI6HJzTWAgXLJUr2A05ZCf3BiT6U4HxysZB&fields=name%2Cprivacy HTTP/1.1" 400 294
+INFO:facebook_api:FacebookAPI: Verificación de grupo - HTTP 400
+ERROR:facebook_api:FacebookAPI: Error accediendo al grupo: Unsupported get request. Object with ID '438961312856471' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api
+WARNING:routes:Routes: Credenciales de Facebook inválidas: Error accediendo al grupo: Unsupported get request. Object with ID '438961312856471' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api
+INFO:config_manager:ConfigManager: Buscando configuración para YT_API_KEY
+INFO:config_manager:ConfigManager: Configuración YT_API_KEY encontrada
+INFO:config_manager:ConfigManager: Buscando configuración para DISCORD_WEBHOOK
+WARNING:config_manager:ConfigManager: Configuración DISCORD_WEBHOOK no encontrada
+INFO:config_manager:ConfigManager: Buscando configuración para FB_ACCESS_TOKEN
+WARNING:config_manager:ConfigManager: Configuración FB_ACCESS_TOKEN no encontrada
+INFO:routes:Routes: Estado de configuración - YouTube: True, Discord: False, Facebook: False

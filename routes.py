@@ -260,21 +260,29 @@ def config():
         elif action == 'update_facebook':
             access_token = request.form.get('facebook_access_token', '').strip()
             group_id = request.form.get('facebook_group_id', '').strip()
+            force_save = request.form.get('force_save') == 'true'
             logger.info("Routes: Actualizando credenciales de Facebook")
             
             if access_token and group_id:
-                # Test the credentials
-                logger.info("Routes: Probando credenciales de Facebook")
-                is_valid, message = ConfigManager.test_facebook_credentials(access_token, group_id)
-                
-                if is_valid:
+                if force_save:
+                    # Guardar sin validación
+                    logger.info("Routes: Guardando credenciales de Facebook sin validación")
                     ConfigManager.set_config('FB_ACCESS_TOKEN', access_token)
                     ConfigManager.set_config('FB_GROUP_ID', group_id)
-                    logger.info("Routes: Credenciales de Facebook guardadas exitosamente")
-                    flash(f'Facebook configurado exitosamente: {message}', 'success')
+                    flash('Credenciales de Facebook guardadas (sin validación). Usa "Probar Credenciales" para verificar que funcionen.', 'warning')
                 else:
-                    logger.warning(f"Routes: Credenciales de Facebook inválidas: {message}")
-                    flash(f'Error con credenciales de Facebook: {message}', 'error')
+                    # Test the credentials
+                    logger.info("Routes: Probando credenciales de Facebook")
+                    is_valid, message = ConfigManager.test_facebook_credentials(access_token, group_id)
+                    
+                    if is_valid:
+                        ConfigManager.set_config('FB_ACCESS_TOKEN', access_token)
+                        ConfigManager.set_config('FB_GROUP_ID', group_id)
+                        logger.info("Routes: Credenciales de Facebook guardadas exitosamente")
+                        flash(f'Facebook configurado exitosamente: {message}', 'success')
+                    else:
+                        logger.warning(f"Routes: Credenciales de Facebook inválidas: {message}")
+                        flash(f'Error con credenciales de Facebook: {message}. Si estás seguro de que son correctas, puedes guardarlas sin validación.', 'error')
             else:
                 logger.warning("Routes: Credenciales de Facebook incompletas")
                 flash('Ambos campos (Access Token y Group ID) son requeridos', 'error')

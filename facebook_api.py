@@ -171,8 +171,10 @@ class FacebookAPI:
                 error_message = error_data.get('error', {}).get('message', 'No se puede acceder al grupo')
                 logger.error(f"FacebookAPI: Error accediendo al grupo: {error_message}")
                 
-                # Sugerir usar solo el ID numérico si detectamos una URL
-                if 'facebook.com' in group_input:
+                # Análisis más detallado del error
+                if 'does not exist' in error_message or 'missing permissions' in error_message:
+                    return False, f"Problema con el acceso al grupo. Verifica que: 1) El Group ID sea correcto, 2) Seas miembro del grupo, 3) Tu token tenga permisos 'groups_access_member_info' y 'publish_to_groups'"
+                elif 'facebook.com' in group_input:
                     return False, f"Error: Usa solo el ID numérico del grupo (ej: {group_id}), no la URL completa"
                 else:
                     return False, f"Error accediendo al grupo: {error_message}"
