@@ -20,14 +20,14 @@
                 <div class="col-lg-6 col-xl-4 mb-4">
                     <div class="card h-100">
                         <img src="{{ video.thumbnail_url }}" class="card-img-top" alt="{{ video.title }}" style="height: 200px; object-fit: cover;">
-                        
+
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">{{ video.title }}</h5>
-                            
+
                             <p class="card-text text-muted small flex-grow-1">
                                 {{ video.description[:150] }}{% if video.description|length > 150 %}...{% endif %}
                             </p>
-                            
+
                             <div class="row text-muted small mb-3">
                                 <div class="col-6">
                                     <i class="fas fa-eye me-1"></i>{{ "{:,}".format(video.view_count) }} views
@@ -36,18 +36,18 @@
                                     <i class="fas fa-thumbs-up me-1"></i>{{ "{:,}".format(video.like_count) }} likes
                                 </div>
                             </div>
-                            
+
                             <div class="d-grid gap-2">
                                 <!-- Watch on YouTube -->
                                 <a href="{{ video.youtube_url }}" target="_blank" class="btn btn-danger">
                                     <i class="fab fa-youtube me-2"></i>Ver en YouTube
                                 </a>
-                                
+
                                 <!-- Copy formatted message -->
                                 <button type="button" class="btn btn-outline-secondary" onclick="copyFormattedMessage({{ video.id }})">
                                     <i class="fas fa-copy me-2"></i>Copiar Mensaje
                                 </button>
-                                
+
                                 <div class="row g-2">
                                     <!-- Send to Discord -->
                                     <div class="col-6">
@@ -57,7 +57,7 @@
                                             </button>
                                         </form>
                                     </div>
-                                    
+
                                     <!-- Send to Facebook -->
                                     <div class="col-6">
                                         <form method="POST" action="{{ url_for('send_to_facebook', video_id=video.id) }}" class="d-inline">
@@ -67,7 +67,7 @@
                                         </form>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Delete video -->
                                 <div class="mt-2">
                                     <form method="POST" action="{{ url_for('delete_video', video_id=video.id) }}" 
@@ -79,7 +79,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="card-footer text-muted small">
                             Agregado: {{ video.added_at.strftime('%Y-%m-%d %H:%M') }}
                         </div>

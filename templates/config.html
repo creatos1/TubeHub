@@ -245,6 +245,91 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Facebook Groups Automation -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fab fa-facebook me-2"></i>
+                    <strong>Automatización de Grupos de Facebook</strong>
+                </div>
+                <div class="mt-2">
+                    {% if facebook_groups_configured %}
+                        <span class="badge bg-success"><i class="fas fa-check me-1"></i>Configurado ({{ current_groups|length }} grupos)</span>
+                    {% else %}
+                        <span class="badge bg-danger"><i class="fas fa-times me-1"></i>No configurado</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body">
+                <p>Automatización para publicar en múltiples grupos de Facebook usando Selenium WebDriver.</p>
+                
+                <form method="POST" class="mb-3">
+                    <input type="hidden" name="action" value="update_facebook_groups">
+                    
+                    <div class="mb-3">
+                        <label for="facebook_groups" class="form-label">URLs de Grupos de Facebook</label>
+                        <textarea class="form-control" 
+                                  id="facebook_groups" 
+                                  name="facebook_groups" 
+                                  rows="6"
+                                  placeholder="https://www.facebook.com/groups/mi-grupo-1/&#10;https://www.facebook.com/groups/mi-grupo-2/&#10;Una URL por línea"
+                                  required>{% for group in current_groups %}{{ group }}{% if not loop.last %}&#10;{% endif %}{% endfor %}</textarea>
+                        <div class="form-text">
+                            Ingresa una URL de grupo por línea. Ejemplo: https://www.facebook.com/groups/nombre-del-grupo/
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="facebook_email" class="form-label">Email de Facebook (Opcional)</label>
+                            <input type="email" 
+                                   class="form-control" 
+                                   id="facebook_email" 
+                                   name="facebook_email" 
+                                   value="{{ current_email }}"
+                                   placeholder="tu-email@ejemplo.com">
+                            <div class="form-text">
+                                Para login automático (opcional)
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="facebook_password" class="form-label">Contraseña de Facebook (Opcional)</label>
+                            <input type="password" 
+                                   class="form-control" 
+                                   id="facebook_password" 
+                                   name="facebook_password" 
+                                   placeholder="Tu contraseña">
+                            <div class="form-text">
+                                Para login automático (opcional)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Guardar Configuración
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Cómo funciona:</strong>
+                    <ul class="mb-0 mt-2">
+                        <li>Se abre una ventana de Chrome automáticamente</li>
+                        <li>Si no proporcionas credenciales, deberás iniciar sesión manualmente</li>
+                        <li>La automatización visitará cada grupo y publicará el contenido</li>
+                        <li>Habrá pausas entre publicaciones para evitar ser detectado como spam</li>
+                    </ul>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Importante:</strong> Asegúrate de ser miembro de todos los grupos donde quieres publicar y de seguir las reglas de cada grupo.
+                </div>
                 
                 <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#facebookInstructions">
                     <i class="fas fa-question-circle me-1"></i>¿Cómo obtener credenciales?

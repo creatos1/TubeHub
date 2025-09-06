@@ -4,15 +4,18 @@ from models import Video, Config
 from youtube_api import YouTubeAPI
 from discord_webhook import DiscordWebhook
 from facebook_api import FacebookAPI
+from facebook_groups_automation import FacebookGroupsAutomation
 from config_manager import ConfigManager
 from datetime import datetime
 import logging
+import threading
 
 logger = logging.getLogger(__name__)
 
 youtube_api = YouTubeAPI()
 discord_webhook = DiscordWebhook()
 facebook_api = FacebookAPI()
+groups_automation = None
 
 @app.route('/')
 def index():
@@ -173,6 +176,61 @@ def send_to_facebook(video_id):
     
     return redirect(url_for('index'))
 
+@app.route('/send_to_facebook_groups/<int:video_id>', methods=['POST'])
+def send_to_facebook_groups(video_id):
+    """Send video to Facebook groups using automation"""
+    logger.info(f"Routes: Enviando video a grupos de Facebook automatizados, ID: {video_id}")
+    
+    try:
+        video = Video.query.get_or_404(video_id)
+        groups = ConfigManager.get_facebook_groups()
+        
+        if not groups:
+            flash('No hay grupos de Facebook configurados. Configúralos en la página de Configuración.', 'warning')
+            return redirect(url_for('index'))
+        
+        logger.info(f"Routes: Iniciando automatización para '{video.title}' en {len(groups)} grupos")
+        
+        # Ejecutar automatización en hilo separado para no bloquear la UI
+        def run_automation():
+            global groups_automation
+            groups_automation = FacebookGroupsAutomation()
+            
+            try:
+                groups_automation.setup_driver()
+                
+                # Obtener credenciales de login si están configuradas
+                email, password = ConfigManager.get_facebook_credentials()
+                
+                if groups_automation.login_facebook(email, password):
+                    results = groups_automation.post_video_to_groups(video, groups)
+                    
+                    # Procesar resultados
+                    successful = sum(1 for r in results if r['success'])
+                    logger.info(f"Routes: Automatización completada: {successful}/{len(results)} grupos exitosos")
+                    
+                else:
+                    logger.error("Routes: Error en login de Facebook")
+                    
+            except Exception as e:
+                logger.error(f"Routes: Error en automatización: {e}")
+            finally:
+                groups_automation.close_driver()
+                groups_automation = None
+        
+        # Iniciar en hilo separado
+        automation_thread = threading.Thread(target=run_automation)
+        automation_thread.daemon = True
+        automation_thread.start()
+        
+        flash(f'Automatización iniciada para "{video.title}". Se abrirá una ventana de navegador para el proceso.', 'info')
+        
+    except Exception as e:
+        logger.error(f"Routes: Error iniciando automatización: {e}")
+        flash('Error al iniciar automatización. Intenta de nuevo.', 'error')
+    
+    return redirect(url_for('index'))
+
 @app.route('/get_formatted_message/<int:video_id>')
 def get_formatted_message(video_id):
     """Get formatted message for copying"""
@@ -296,19 +354,57 @@ def config():
                 flash(f'Prueba Facebook: {message}', 'success' if is_valid else 'error')
             else:
                 flash('No hay credenciales de Facebook configuradas', 'error')
+        
+        elif action == 'update_facebook_groups':
+            groups_text = request.form.get('facebook_groups', '').strip()
+            email = request.form.get('facebook_email', '').strip()
+            password = request.form.get('facebook_password', '').strip()
+            
+            logger.info("Routes: Actualizando configuración de grupos de Facebook")
+            
+            if groups_text:
+                # Procesar URLs de grupos
+                group_urls = [url.strip() for url in groups_text.split('\n') if url.strip()]
+                
+                if group_urls:
+                    ConfigManager.set_facebook_groups(group_urls)
+                    logger.info(f"Routes: {len(group_urls)} grupos guardados")
+                    flash(f'{len(group_urls)} grupos de Facebook configurados exitosamente', 'success')
+                else:
+                    flash('No se encontraron URLs válidas de grupos', 'error')
+            else:
+                flash('Debes proporcionar al menos un grupo', 'error')
+            
+            # Guardar credenciales de login opcionales
+            if email:
+                ConfigManager.set_config('FB_EMAIL', email)
+                logger.info("Routes: Email de Facebook guardado")
+            
+            if password:
+                ConfigManager.set_config('FB_PASSWORD', password)
+                logger.info("Routes: Password de Facebook guardado")
+                flash('Credenciales de login guardadas (login automático habilitado)', 'info')
     
     # Get current configuration status
     youtube_configured = ConfigManager.get_config('YT_API_KEY') is not None
     discord_configured = ConfigManager.get_config('DISCORD_WEBHOOK') is not None
     facebook_configured = (ConfigManager.get_config('FB_ACCESS_TOKEN') is not None and 
                           ConfigManager.get_config('FB_PAGE_ID') is not None)
+    facebook_groups_configured = len(ConfigManager.get_facebook_groups()) > 0
     
-    logger.info(f"Routes: Estado de configuración - YouTube: {youtube_configured}, Discord: {discord_configured}, Facebook: {facebook_configured}")
+    # Obtener grupos para mostrar en la configuración
+    current_groups = ConfigManager.get_facebook_groups()
+    current_email = ConfigManager.get_config('FB_EMAIL') or ''
+    
+    logger.info(f"Routes: Estado de configuración - YouTube: {youtube_configured}, Discord: {discord_configured}, Facebook: {facebook_configured}, Grupos: {facebook_groups_configured}")
     
     return render_template('config.html', 
                          youtube_configured=youtube_configured,
                          discord_configured=discord_configured,
-                         facebook_configured=facebook_configured)
+                         facebook_configured=facebook_configured,
+                         facebook_groups_configured=facebook_groups_configured,
+                         current_groups=current_groups,
+                         current_email=current_email)
 
 @app.errorhandler(404)
 def not_found(error):
