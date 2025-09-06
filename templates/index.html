@@ -58,7 +58,7 @@
 
                                 <div class="row g-2">
                                     <!-- Send to Discord -->
-                                    <div class="col-6">
+                                    <div class="col-4">
                                         <form method="POST" action="{{ url_for('send_to_discord', video_id=video.id) }}" class="d-inline">
                                             <button type="submit" class="btn btn-info w-100">
                                                 <i class="fab fa-discord me-2"></i>Discord
@@ -67,10 +67,19 @@
                                     </div>
 
                                     <!-- Send to Facebook -->
-                                    <div class="col-6">
+                                    <div class="col-4">
                                         <form method="POST" action="{{ url_for('send_to_facebook', video_id=video.id) }}" class="d-inline">
                                             <button type="submit" class="btn btn-primary w-100">
                                                 <i class="fab fa-facebook me-2"></i>Facebook
+                                            </button>
+                                        </form>
+                                    </div>
+
+                                    <!-- Send to Facebook Groups (Automation) -->
+                                    <div class="col-4">
+                                        <form method="POST" action="{{ url_for('send_to_facebook_groups', video_id=video.id) }}" class="d-inline">
+                                            <button type="submit" class="btn btn-success w-100" title="Automatización con Selenium">
+                                                <i class="fas fa-robot me-2"></i>Grupos FB
                                             </button>
                                         </form>
                                     </div>
