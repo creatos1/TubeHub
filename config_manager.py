@@ -105,3 +105,16 @@ class ConfigManager:
         except Exception as e:
             logger.error(f"ConfigManager: Error al probar Discord webhook: {e}")
             return False, f"Error de conexión: {str(e)}"
+    
+    @staticmethod
+    def test_facebook_credentials(access_token, group_id):
+        """Prueba las credenciales de Facebook"""
+        try:
+            logger.info("ConfigManager: Probando credenciales de Facebook")
+            from facebook_api import FacebookAPI
+            
+            return FacebookAPI.test_facebook_credentials(access_token, group_id)
+            
+        except Exception as e:
+            logger.error(f"ConfigManager: Error al probar Facebook credentials: {e}")
+            return False, f"Error al probar credenciales: {str(e)}"
