@@ -3,6 +3,7 @@ from app import app, db
 from models import Video, Config
 from youtube_api import YouTubeAPI
 from discord_webhook import DiscordWebhook
+from facebook_api import FacebookAPI
 from config_manager import ConfigManager
 from datetime import datetime
 import logging
@@ -11,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 youtube_api = YouTubeAPI()
 discord_webhook = DiscordWebhook()
+facebook_api = FacebookAPI()
 
 @app.route('/')
 def index():
@@ -144,6 +146,33 @@ def send_to_discord(video_id):
     
     return redirect(url_for('index'))
 
+@app.route('/send_to_facebook/<int:video_id>', methods=['POST'])
+def send_to_facebook(video_id):
+    """Send video to Facebook group"""
+    logger.info(f"Routes: Enviando video a Facebook, ID: {video_id}")
+    
+    try:
+        video = Video.query.get_or_404(video_id)
+        logger.info(f"Routes: Video encontrado para enviar: '{video.title}'")
+        
+        is_success, message = facebook_api.post_video_notification(video)
+        
+        if is_success:
+            logger.info(f"Routes: Video '{video.title}' enviado a Facebook exitosamente")
+            flash(f'¡Video "{video.title}" enviado a Facebook exitosamente! {message}', 'success')
+        else:
+            logger.warning(f"Routes: Error enviando a Facebook: {message}")
+            flash(f'Error al enviar a Facebook: {message}', 'error')
+            
+    except ValueError as e:
+        logger.error(f"Routes: Error de validación enviando a Facebook: {e}")
+        flash(str(e), 'error')
+    except Exception as e:
+        logger.error(f"Routes: Error inesperado enviando a Facebook: {e}")
+        flash('Error al enviar a Facebook. Intenta de nuevo.', 'error')
+    
+    return redirect(url_for('index'))
+
 @app.route('/get_formatted_message/<int:video_id>')
 def get_formatted_message(video_id):
     """Get formatted message for copying"""
@@ -227,16 +256,51 @@ def config():
                 flash(f'Prueba Discord webhook: {message}', 'success' if is_valid else 'error')
             else:
                 flash('No hay Discord webhook configurado', 'error')
+        
+        elif action == 'update_facebook':
+            access_token = request.form.get('facebook_access_token', '').strip()
+            group_id = request.form.get('facebook_group_id', '').strip()
+            logger.info("Routes: Actualizando credenciales de Facebook")
+            
+            if access_token and group_id:
+                # Test the credentials
+                logger.info("Routes: Probando credenciales de Facebook")
+                is_valid, message = ConfigManager.test_facebook_credentials(access_token, group_id)
+                
+                if is_valid:
+                    ConfigManager.set_config('FB_ACCESS_TOKEN', access_token)
+                    ConfigManager.set_config('FB_GROUP_ID', group_id)
+                    logger.info("Routes: Credenciales de Facebook guardadas exitosamente")
+                    flash(f'Facebook configurado exitosamente: {message}', 'success')
+                else:
+                    logger.warning(f"Routes: Credenciales de Facebook inválidas: {message}")
+                    flash(f'Error con credenciales de Facebook: {message}', 'error')
+            else:
+                logger.warning("Routes: Credenciales de Facebook incompletas")
+                flash('Ambos campos (Access Token y Group ID) son requeridos', 'error')
+        
+        elif action == 'test_facebook':
+            logger.info("Routes: Probando credenciales de Facebook existentes")
+            access_token = ConfigManager.get_config('FB_ACCESS_TOKEN')
+            group_id = ConfigManager.get_config('FB_GROUP_ID')
+            if access_token and group_id:
+                is_valid, message = ConfigManager.test_facebook_credentials(access_token, group_id)
+                flash(f'Prueba Facebook: {message}', 'success' if is_valid else 'error')
+            else:
+                flash('No hay credenciales de Facebook configuradas', 'error')
     
     # Get current configuration status
     youtube_configured = ConfigManager.get_config('YT_API_KEY') is not None
     discord_configured = ConfigManager.get_config('DISCORD_WEBHOOK') is not None
+    facebook_configured = (ConfigManager.get_config('FB_ACCESS_TOKEN') is not None and 
+                          ConfigManager.get_config('FB_GROUP_ID') is not None)
     
-    logger.info(f"Routes: Estado de configuración - YouTube: {youtube_configured}, Discord: {discord_configured}")
+    logger.info(f"Routes: Estado de configuración - YouTube: {youtube_configured}, Discord: {discord_configured}, Facebook: {facebook_configured}")
     
     return render_template('config.html', 
                          youtube_configured=youtube_configured,
-                         discord_configured=discord_configured)
+                         discord_configured=discord_configured,
+                         facebook_configured=facebook_configured)
 
 @app.errorhandler(404)
 def not_found(error):

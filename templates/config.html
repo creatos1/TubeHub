@@ -157,6 +157,95 @@
             </div>
         </div>
     </div>
+    
+    <!-- Facebook Configuration -->
+    <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h4 class="card-title mb-0">
+                    <i class="fab fa-facebook me-2"></i>Facebook Groups
+                </h4>
+                <div class="mt-2">
+                    {% if facebook_configured %}
+                        <span class="badge bg-success"><i class="fas fa-check me-1"></i>Configurado</span>
+                    {% else %}
+                        <span class="badge bg-danger"><i class="fas fa-times me-1"></i>No configurado</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body">
+                <p>Requerido para publicar videos en grupos de Facebook donde eres miembro.</p>
+                
+                <form method="POST" class="mb-3">
+                    <input type="hidden" name="action" value="update_facebook">
+                    <div class="mb-3">
+                        <label for="facebook_access_token" class="form-label">Facebook Access Token</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="facebook_access_token" 
+                               name="facebook_access_token" 
+                               placeholder="Pega tu Facebook Access Token aquí"
+                               required>
+                        <div class="form-text">
+                            Token de acceso con permisos para publicar en grupos
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="facebook_group_id" class="form-label">Facebook Group ID</label>
+                        <input type="text" 
+                               class="form-control" 
+                               id="facebook_group_id" 
+                               name="facebook_group_id" 
+                               placeholder="ID del grupo de Facebook"
+                               required>
+                        <div class="form-text">
+                            ID numérico del grupo donde quieres publicar
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Guardar y Probar
+                        </button>
+                    </div>
+                </form>
+                
+                {% if facebook_configured %}
+                    <form method="POST" class="mb-3">
+                        <input type="hidden" name="action" value="test_facebook">
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-outline-info">
+                                <i class="fas fa-vial me-2"></i>Probar Credenciales Actuales
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
+                
+                <div class="collapse" id="facebookInstructions">
+                    <div class="border-top pt-3">
+                        <h6>Cómo obtener tus credenciales:</h6>
+                        <ol class="small">
+                            <li>Ve a <a href="https://developers.facebook.com/" target="_blank">Facebook for Developers</a></li>
+                            <li>Crea una app y obtén un access token con permisos de "groups_access_member_info" y "publish_to_groups"</li>
+                            <li>Para obtener el Group ID:
+                                <ul>
+                                    <li>Ve al grupo en Facebook</li>
+                                    <li>En la URL verás algo como facebook.com/groups/123456789</li>
+                                    <li>El número al final (123456789) es tu Group ID</li>
+                                </ul>
+                            </li>
+                        </ol>
+                        <div class="alert alert-warning small">
+                            <strong>Importante:</strong> Asegúrate de que tu access token tenga los permisos necesarios y que seas miembro del grupo donde quieres publicar.
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#facebookInstructions">
+                    <i class="fas fa-question-circle me-1"></i>¿Cómo obtener credenciales?
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -173,6 +262,7 @@
                     <li><strong>Cuota de YouTube API excedida:</strong> La API de YouTube tiene límites diarios. Si los excedes, espera 24 horas o solicita un aumento de cuota.</li>
                     <li><strong>Video no encontrado:</strong> Asegúrate de que el video sea público y la URL sea correcta.</li>
                     <li><strong>Webhook de Discord falló:</strong> Verifica que la URL del webhook sea correcta y el canal aún exista.</li>
+                    <li><strong>Error de Facebook:</strong> Asegúrate de tener los permisos correctos y ser miembro del grupo. Los tokens de Facebook expiran periódicamente.</li>
                     <li><strong>Errores de base de datos:</strong> La base de datos SQLite se crea automáticamente. Si persisten los problemas, reinicia la aplicación.</li>
                 </ul>
                 
