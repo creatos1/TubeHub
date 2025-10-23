@@ -12,3 +12,8 @@ flask
 flask-sqlalchemy
 gunicorn
 psycopg2-binary
+buildozer
+cython
+kivy
+kivymd
+pillow
