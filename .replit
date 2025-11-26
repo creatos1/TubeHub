@@ -2,7 +2,7 @@ modules = ["python-3.11", "web"]
 
 [nix]
 channel = "stable-25_05"
-packages = ["geckodriver", "openssl", "postgresql"]
+packages = ["SDL2", "SDL2_image", "SDL2_mixer", "SDL2_ttf", "freetype", "geckodriver", "lcms2", "libcxx", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "mtdev", "openjpeg", "openssl", "pkg-config", "postgresql", "tcl", "tk", "zlib"]
 
 [deployment]
 deploymentTarget = "autoscale"
